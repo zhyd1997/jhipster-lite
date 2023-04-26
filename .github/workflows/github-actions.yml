@@ -69,10 +69,6 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw clean verify sonar:sonar
-      - name: 'Analysis: local Sonar'
-        run: |
-          ./tests-ci/wait_sonar_analysis.sh
-          ./tests-ci/sonar.sh
       - name: 'Analysis: SonarCloud'
         if: github.repository == 'jhipster/jhipster-lite' && github.ref == 'refs/heads/main'
         env:
