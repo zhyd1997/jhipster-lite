@@ -8,6 +8,8 @@ fi
 
 sonar=$(curl -sX GET 'http://localhost:9001/api/measures/component?component='"$application"'&metricKeys=bugs%2Ccoverage%2Cvulnerabilities%2Cduplicated_lines_density%2Ccode_smells%2Csecurity_hotspots');
 
+echo "$sonar"|jq -r .component|jq -r .measures|jq '[.[]|select(.metric=="vulnerabilities")][0]'
+
 vul=$(echo "$sonar"|jq -r .component|jq -r .measures|jq '[.[]|select(.metric=="vulnerabilities")][0]'|jq -r .value);
 cov=$(echo "$sonar"|jq -r .component|jq -r .measures|jq '[.[]|select(.metric=="coverage")][0]'|jq -r .value);
 bug=$(echo "$sonar"|jq -r .component|jq -r .measures|jq '[.[]|select(.metric=="bugs")][0]'|jq -r .value);
