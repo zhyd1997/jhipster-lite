@@ -22,7 +22,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    const initUserTheme = (this.getTheme() as 'light-theme' | 'dark-theme') || (this.getMediaPreference() as 'light-theme' | 'dark-theme');
+    const initUserTheme = (this.getTheme() as 'light-theme' | 'dark-theme') || this.getMediaPreference();
     this.setTheme(initUserTheme);
   },
 
