@@ -13,9 +13,9 @@
   </parent>
 
   <groupId>tech.jhipster.lite</groupId>
-  <artifactId>jhlite</artifactId>
+  <artifactId>zhyd1997</artifactId>
   <version>0.32.1-SNAPSHOT</version>
-  <name>jhlite</name>
+  <name>zhyd1997</name>
   <description>JHipster Lite</description>
   <packaging>jar</packaging>
   <url>https://github.com/jhipster/jhipster-lite</url>
@@ -27,7 +27,7 @@
     </license>
   </licenses>
   <organization>
-    <name>JHipster</name>
+    <name>zhyd1997</name>
     <url>https://www.jhipster.tech</url>
   </organization>
   <developers>
@@ -35,7 +35,7 @@
       <id>pascalgrimaud</id>
       <name>Pascal Grimaud</name>
       <url>https://github.com/pascalgrimaud</url>
-      <organization>JHipster</organization>
+      <organization>zhyd1997</organization>
       <organizationUrl>https://www.jhipster.tech/</organizationUrl>
     </developer>
     <!-- The JHipster core team is listed at https://www.jhipster.tech/team/ -->
