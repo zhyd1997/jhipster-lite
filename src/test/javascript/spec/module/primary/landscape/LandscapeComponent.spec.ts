@@ -3,7 +3,7 @@ import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import { ModulesRepository } from '@/module/domain/ModulesRepository';
 import { ModulesToApply } from '@/module/domain/ModulesToApply';
 import { LandscapeVue } from '@/module/primary/landscape';
-import { flushPromises, mount, shallowMount, VueWrapper } from '@vue/test-utils';
+import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import sinon, { SinonStub } from 'sinon';
 import { stubAlertBus } from '../../../common/domain/AlertBus.fixture';
 import { wrappedElement } from '../../../WrappedElement';
@@ -14,7 +14,6 @@ import { stubWindow } from '../GlobalWindow.fixture';
 import { describe, it, expect, vi } from 'vitest';
 import { BodyCursorUpdater } from '@/common/primary/cursor/BodyCursorUpdater';
 import { LandscapeScroller } from '@/module/primary/landscape/LandscapeScroller';
-import { HeaderVue } from '@/common/primary/header';
 
 interface ApplicationListenerStub extends ApplicationListener {
   addEventListener: SinonStub;
@@ -129,40 +128,6 @@ describe('Landscape', () => {
       wrapper.unmount();
 
       expect(applicationListener.removeEventListener.calledOnce).toBe(true);
-    });
-  });
-
-  describe('Theme Switch', () => {
-    it('Should return dark-theme if prefers-color-scheme is dark', () => {
-      const wrapper = shallowMount(HeaderVue);
-
-      const mediaQueryListStub = { matches: true } as MediaQueryList;
-      vi.spyOn(window, 'matchMedia').mockReturnValue(mediaQueryListStub);
-
-      expect(wrapper.vm.getMediaPreference()).toEqual('dark-theme');
-    });
-
-    it('Should return light-theme if prefers-color-scheme is not dark', () => {
-      const wrapper = shallowMount(HeaderVue);
-
-      const mediaQueryListStub = { matches: false } as MediaQueryList;
-      vi.spyOn(window, 'matchMedia').mockReturnValue(mediaQueryListStub);
-
-      expect(wrapper.vm.getMediaPreference()).toEqual('light-theme');
-    });
-
-    it('Should switch theme', async () => {
-      const mediaQueryListStub = { matches: false } as MediaQueryList;
-      vi.spyOn(window, 'matchMedia').mockReturnValue(mediaQueryListStub);
-
-      const wrapper = shallowMount(HeaderVue);
-      const checkbox = wrapper.find('.container_toggle');
-
-      checkbox.trigger('change');
-      expect(wrapper.vm.getTheme()).toEqual('dark-theme');
-
-      checkbox.trigger('change');
-      expect(wrapper.vm.getTheme()).toEqual('light-theme');
     });
   });
 
