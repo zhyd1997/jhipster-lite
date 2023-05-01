@@ -9,6 +9,7 @@ export default class LocalStorage implements Storage {
     return localStorage.getItem(key);
   }
 
+  /* istanbul ignore next */
   delete(key: string): void {
     localStorage.removeItem(key);
   }

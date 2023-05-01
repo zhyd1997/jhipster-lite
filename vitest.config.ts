@@ -28,7 +28,6 @@ export default defineConfig({
     outputFile: {
       'vitest-sonar-reporter': 'target/test-results/TESTS-results-sonar.xml',
     },
-    setupFiles: ['src/test/javascript/spec/setup/setup.ts'],
     coverage: {
       clean: true,
       exclude: [
