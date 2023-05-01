@@ -62,7 +62,7 @@
 
   &.selected {
     background-color: $jhipster-lite-primary-color;
-    color: #ffffff;
+    color: var(--jhlite-white);
   }
 
   &--content {

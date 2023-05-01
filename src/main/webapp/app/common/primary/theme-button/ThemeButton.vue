@@ -1,7 +1,19 @@
 <template>
   <div class="container">
-    <input id="switch" class="container_toggle" type="checkbox" name="mode" @change="toggleTheme" />
-    <label for="switch" class="theme-toggle-button__label">Toggle</label>
+    <input
+      id="switch"
+      class="container_toggle"
+      type="checkbox"
+      name="mode"
+      :checked="!isDarkTheme"
+      data-selector="theme-switch-button"
+      @change="toggleTheme"
+    />
+    <label for="switch" class="theme-switch_label" :aria-label="theme">
+      <span>🌙</span>
+      <span>☀️</span>
+      <div class="theme-switch_toggle" :class="{ 'theme-switch_toggle-checked': theme === 'dark-theme' }"></div>
+    </label>
   </div>
 </template>
 
@@ -18,50 +30,36 @@
   visibility: hidden;
 }
 
-.theme-toggle-button__label {
-  cursor: pointer;
-  text-indent: -9999px;
-  width: 55px;
-  height: 30px;
-  background: var(--lightBtn);
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
+.theme-switch_label {
   align-items: center;
-  -webkit-border-radius: 100px;
-  -moz-border-radius: 100px;
-  border-radius: 100px;
+  background: var(--text-primary-color);
+  border: calc(var(--element-size) * 0.025) solid var(--accent-color);
+  border-radius: var(--element-size);
+  cursor: pointer;
+  display: flex;
+  font-size: calc(var(--element-size) * 0.3);
+  height: calc(var(--element-size) * 0.35);
   position: relative;
+  padding: calc(var(--element-size) * 0.1);
+  transition: background 0.5s ease;
+  justify-content: space-between;
+  width: var(--element-size);
+  z-index: 1;
 }
 
-.theme-toggle-button__label:after {
-  content: '';
-  background: #fff;
-  width: 20px;
-  height: 20px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
+.theme-switch_toggle {
   position: absolute;
-  top: 5px;
-  left: 4px;
-  transition: cubic-bezier(0.68, -0.55, 0.27, 01.55) 320ms;
+  background-color: var(--background-color-primary);
+  border-radius: 50%;
+  top: calc(var(--element-size) * 0.07);
+  left: calc(var(--element-size) * 0.07);
+  height: calc(var(--element-size) * 0.4);
+  width: calc(var(--element-size) * 0.4);
+  transform: translateX(0);
+  transition: transform 0.3s ease, background-color 0.5s ease;
 }
 
-.container_toggle + .theme-toggle-button__label {
-  background: red;
-}
-
-.container_toggle:checked + .theme-toggle-button__label {
-  background: #ffbd07;
-}
-
-.container_toggle:checked + .theme-toggle-button__label:after {
-  left: calc(100% - 5px);
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
-  transform: translateX(-100%);
+.theme-switch_toggle-checked {
+  transform: translateX(calc(var(--element-size) * 0.6)) !important;
 }
 </style>

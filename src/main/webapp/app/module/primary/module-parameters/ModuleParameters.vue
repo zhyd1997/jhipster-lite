@@ -55,7 +55,7 @@ $jhipster-lite-invalid-optional-parameters-color: #90670f;
   }
 
   &--type-stats.not-selected {
-    color: #fff;
+    color: var(--jhlite-white);
     margin-left: 7px;
   }
 

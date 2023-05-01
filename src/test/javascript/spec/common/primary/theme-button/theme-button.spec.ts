@@ -9,5 +9,15 @@ describe('ThemeButton', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  // TODO theme switch fn test.
+  it('Should switch theme', () => {
+    const wrapper = shallowMount(ThemeButtonVue);
+
+    const checkbox = wrapper.find('.container_toggle');
+
+    checkbox.trigger('change');
+    expect(wrapper.vm.theme).toEqual('dark-theme');
+
+    checkbox.trigger('change');
+    expect(wrapper.vm.theme).toEqual('light-theme');
+  });
 });

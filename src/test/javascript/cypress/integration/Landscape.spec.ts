@@ -6,17 +6,21 @@ describe('Landscape', () => {
 
   it('Should change theme after toggle switch theme button', () => {
     cy.visit('/landscape', {
+      // see https://www.cypress.io/blog/2019/12/13/test-your-web-app-in-dark-mode/
       onBeforeLoad(win) {
         cy.stub(win, 'matchMedia').withArgs('(prefers-color-scheme: dark)').returns({ matches: true })
       },
     });
 
-    cy.get('#switch').should('exist');
+    const themeSwitchButton = dataSelector('theme-switch-button');
+    cy.get(themeSwitchButton).should('exist').should('not.be.visible').should('not.be.checked');
 
-    cy.get('#switch').click({ force: true });
+    cy.get(themeSwitchButton).click({ force: true })
+    cy.get(themeSwitchButton).should('be.checked');
     cy.get('.jhlite-layout--body').should('have.css', 'background-color', 'rgb(255, 255, 255)');
 
-    cy.get('#switch').click({ force: true });
+    cy.get(themeSwitchButton).click({ force: true })
+    cy.get(themeSwitchButton).should('not.be.checked');
     cy.get('.jhlite-layout--body').should('have.css', 'background-color', 'rgb(15, 23, 42)');
   });
 
