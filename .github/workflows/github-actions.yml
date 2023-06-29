@@ -203,7 +203,7 @@ jobs:
 #         if: failure()
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
-          echo ${{ steps.cache_up_to_date }}
+          echo ${{ steps.cache_md5sum.outputs.cache_up_to_date }}
           if [ -f 'src/main/docker/sonar.yml' ]; then
             docker-compose -f src/main/docker/sonar.yml up -d
             ${{ github.workspace }}/tests-ci/wait_sonar.sh
