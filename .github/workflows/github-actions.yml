@@ -192,7 +192,7 @@ jobs:
           echo "md5sum_pom_xml=${MD5SUM_POM_XML}" >> $GITHUB_OUTPUT
           echo "${{ env.cache_up_to_date }}"
       - name: 'Init: cache local Maven repository'
-        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == 'false'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == false
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
