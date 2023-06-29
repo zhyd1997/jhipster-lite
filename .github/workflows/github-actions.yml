@@ -192,7 +192,7 @@ jobs:
           echo "md5sum_pom_xml=${MD5SUM_POM_XML}" >> $GITHUB_OUTPUT
           echo "${{ env.cache_up_to_date }}"
       - name: 'Init: cache local Maven repository'
-        if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -200,7 +200,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: 'Test: starting Sonar'
-#         if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           echo ${{ steps.cache_md5sum.outputs.cache_up_to_date }}
@@ -210,7 +210,7 @@ jobs:
             docker ps -a
           fi
       - name: 'Test: verify ${{ matrix.app }}'
-        if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           if [ -f 'mvnw' ]; then
@@ -222,21 +222,21 @@ jobs:
             npm test
           fi
       - name: 'Test: check local Sonar Analysis'
-        if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         run: |
           if [ -f '/tmp/jhlite/${{ matrix.app }}/src/main/docker/sonar.yml' ]; then
             ./tests-ci/sonar.sh ${{ matrix.app }}
           fi
       - name: 'Test: copy shell scripts'
-        if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         run: cp ./tests-ci/start.sh /tmp/jhlite/${{ matrix.app }}/
       - name: 'Test: start docker compose services'
-        if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         working-directory: ./tests-ci/
         run: |
           ./start_docker_compose.sh /tmp/jhlite/${{ matrix.app }}/
       - name: 'Test: start the application'
-        if: failure()
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date }} == "false"
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           # TODO: add also 'gradlew' once gradle support is more advanced
