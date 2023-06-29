@@ -181,8 +181,17 @@ jobs:
           ls -al /tmp/jhlite/${{ matrix.app }}
           MD5SUM_POM_XML=$(md5sum /tmp/jhlite/${{ matrix.app }}/pom.xml | cut -d ' ' -f 1)
           echo $MD5SUM_POM_XML
+          if [ "${{ env.md5sum_pom_xml }}" == "${{ steps.cache_md5sum.outputs.md5sum_pom_xml }}" ]; then
+            echo "Cache is up to date. Stopping workflow..."
+            echo "cache_up_to_date=true" >> $GITHUB_OUTPUT
+            echo "${{ env.cache_up_to_date }}"
+            exit 0
+          fi
+          echo "Cache needs to be updated."
+          echo "cache_up_to_date=false" >> $GITHUB_OUTPUT
           echo "md5sum_pom_xml=${MD5SUM_POM_XML}" >> $GITHUB_OUTPUT
       - name: 'Init: cache local Maven repository'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -190,6 +199,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: 'Test: starting Sonar'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           if [ -f 'src/main/docker/sonar.yml' ]; then
@@ -198,6 +208,7 @@ jobs:
             docker ps -a
           fi
       - name: 'Test: verify ${{ matrix.app }}'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           if [ -f 'mvnw' ]; then
@@ -209,17 +220,21 @@ jobs:
             npm test
           fi
       - name: 'Test: check local Sonar Analysis'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         run: |
           if [ -f '/tmp/jhlite/${{ matrix.app }}/src/main/docker/sonar.yml' ]; then
             ./tests-ci/sonar.sh ${{ matrix.app }}
           fi
       - name: 'Test: copy shell scripts'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         run: cp ./tests-ci/start.sh /tmp/jhlite/${{ matrix.app }}/
       - name: 'Test: start docker compose services'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: ./tests-ci/
         run: |
           ./start_docker_compose.sh /tmp/jhlite/${{ matrix.app }}/
       - name: 'Test: start the application'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           # TODO: add also 'gradlew' once gradle support is more advanced
