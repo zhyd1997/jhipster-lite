@@ -186,8 +186,10 @@ jobs:
         run: |
           MAIN_HASH=$(git ls-remote origin main:./tmp/jhlite/${{ matrix.app }}/pom.xml | cut -f 1)
           PR_HASH=$(git ls-remote origin ${{ github.head_ref }}:./tmp/jhlite/${{ matrix.app }}/pom.xml | cut -f 1)
-          echo "::set-output name=main_hash::$MAIN_HASH"
-          echo "::set-output name=pr_hash::$PR_HASH"
+          echo $MAIN_HASH
+          echo $PR_HASH
+          echo "main_hash=${MAIN_HASH}" >> $GITHUB_OUTPUT
+          echo "pr_hash=${PR_HASH}" >> $GITHUB_OUTPUT
       - name: 'Init: cache local Maven repository'
         uses: actions/cache@v3
         with:
