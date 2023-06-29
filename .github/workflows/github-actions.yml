@@ -181,15 +181,11 @@ jobs:
           ls -al /tmp/jhlite/${{ matrix.app }}
           MD5SUM_POM_XML=$(md5sum /tmp/jhlite/${{ matrix.app }}/pom.xml | cut -d ' ' -f 1)
           echo $MD5SUM_POM_XML
+          if [env.md5sum_pom_xml === $MD5SUM_POM_XML]; then
+            echo "Cache is up to date. Stopping workflow..."
+            exit 0
+          fi
           echo "md5sum_pom_xml=${MD5SUM_POM_XML}" >> $GITHUB_OUTPUT
-      - name: 'Check: compare hash with main branch'
-        run: |
-          MAIN_HASH=$(git ls-remote origin main:./tmp/jhlite/${{ matrix.app }}/pom.xml | cut -f 1)
-          PR_HASH=$(git ls-remote origin ${{ github.head_ref }}:./tmp/jhlite/${{ matrix.app }}/pom.xml | cut -f 1)
-          echo $MAIN_HASH
-          echo $PR_HASH
-          echo "main_hash=${MAIN_HASH}" >> $GITHUB_OUTPUT
-          echo "pr_hash=${PR_HASH}" >> $GITHUB_OUTPUT
       - name: 'Init: cache local Maven repository'
         uses: actions/cache@v3
         with:
