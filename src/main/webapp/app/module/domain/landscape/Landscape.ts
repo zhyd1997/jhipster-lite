@@ -19,6 +19,7 @@ export class Landscape {
   private readonly memoizedSelectionElements = new Memoizer<string, LandscapeSelectionElement[]>();
 
   private constructor(private readonly state: LandscapeState, private readonly projections: LevelsProjections) {
+    console.log('test')
     this.modules = this.buildModules();
     this.properties = this.buildProperties();
   }
