@@ -200,9 +200,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: 'Test: starting Sonar'
-        if: failure()
+#         if: failure()
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
+          echo {{ steps.cache_md5sum.outputs }}
           if [ -f 'src/main/docker/sonar.yml' ]; then
             docker-compose -f src/main/docker/sonar.yml up -d
             ${{ github.workspace }}/tests-ci/wait_sonar.sh
