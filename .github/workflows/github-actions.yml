@@ -187,7 +187,7 @@ jobs:
           echo $MD5SUM_${{ matrix.app }}
           if [ "${{ env['md5sum_${{ matrix.app }}'] }}" == "${{ steps.cache_md5sum.outputs['MD5SUM_${{ matrix.app }}'] }}" ]; then
             echo "Cache is up to date. Stopping workflow..."
-            echo "cache_up_to_date=true" >> $GITHUB_ENV
+            echo "cache_up_to_date=true" >> $GITHUB_OUTPUT
             echo "${{ env.cache_up_to_date }}"
             rm -f ${{ matrix.app }}_archive.tar
             exit 0
