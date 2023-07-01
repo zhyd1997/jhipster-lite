@@ -1,6 +1,5 @@
 package tech.jhipster.lite.generator.client.react.core.application;
 
-// import org.springframework.stereotype.Service;
 import org.springframework.stereotype.Service;
 import tech.jhipster.lite.generator.client.react.core.domain.ReactCoreModulesFactory;
 import tech.jhipster.lite.module.domain.JHipsterModule;
