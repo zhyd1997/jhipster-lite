@@ -185,13 +185,11 @@ jobs:
           tar -cvf ${{ matrix.app }}_archive.tar --exclude="node_modules" --exclude=".gitattributes" --exclude=".git" ${{ matrix.app }}
           MD5SUM_${{ matrix.app }}=$(md5sum ${{ matrix.app }}_archive.tar | cut -d ' ' -f 1)
           echo $MD5SUM_${{ matrix.app }}
-          if [ "${{ env.md5sum_${{ matrix.app }} }}" == "${{ steps.cache_md5sum.outputs.MD5SUM_${{ matrix.app }} }}" ]; then
-            echo "Cache is up to date. Stopping workflow..."
-            echo "cache_up_to_date=true" >> $GITHUB_OUTPUT
-            echo "${{ env.cache_up_to_date }}"
-            rm -f ${{ matrix.app }}_archive.tar
-            exit 0
-          fi
+          echo "Cache needs to be updated."
+          echo "cache_up_to_date=false" >> $GITHUB_OUTPUT
+          echo "md5sum_pom_xml=${MD5SUM_POM_XML}" >> $GITHUB_OUTPUT
+          echo "md5sum_${{ matrix.app }}=${MD5SUM_${{ matrix.app }}}}" >> $GITHUB_OUTPUT
+          rm -rf ${{ matrix.app }}_archive.tar
       - name: 'Init: cache local Maven repository'
         if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         uses: actions/cache@v3
