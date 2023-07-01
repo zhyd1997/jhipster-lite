@@ -184,7 +184,6 @@ jobs:
           cd /tmp/jhlite/
           tar -cvf archive.tar --exclude="node_modules" --exclude=".gitattributes" --exclude=".git" ${{ matrix.app }}
           MD5SUM_${{ matrix.app }}=$(md5sum archive.tar | cut -d ' ' -f 1)
-          echo ${MD5SUM_${{ matrix.app }}
       - name: 'Init: cache local Maven repository'
         if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         uses: actions/cache@v3
