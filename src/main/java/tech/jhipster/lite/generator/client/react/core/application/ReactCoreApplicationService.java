@@ -1,13 +1,11 @@
 package tech.jhipster.lite.generator.client.react.core.application;
 
+// this is a comment.
 import org.springframework.stereotype.Service;
 import tech.jhipster.lite.generator.client.react.core.domain.ReactCoreModulesFactory;
 import tech.jhipster.lite.module.domain.JHipsterModule;
 import tech.jhipster.lite.module.domain.properties.JHipsterModuleProperties;
 
-/**
-  * this is a comment.
-  */
 @Service
 public class ReactCoreApplicationService {
 
