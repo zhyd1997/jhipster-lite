@@ -185,7 +185,7 @@ jobs:
           tar -cvf ${{ matrix.app }}_archive.tar --exclude="node_modules" --exclude=".gitattributes" --exclude=".git" ${{ matrix.app }}
           MD5SUM_${{ matrix.app }}=$(md5sum ${{ matrix.app }}_archive.tar | cut -d ' ' -f 1)
           echo $MD5SUM_${{ matrix.app }}
-          if [ "${{ env['md5sum_' + matrix.app] }}" == "${{ steps.cache_md5sum.outputs['MD5SUM_' + matrix.app] }}" ]; then
+          if [ "${{ env['md5sum_' + ${{ matrix.app }}] }}" == "${{ steps.cache_md5sum.outputs['MD5SUM_' + ${{ matrix.app }}] }}" ]; then
             echo "Cache is up to date. Stopping workflow..."
             echo "cache_up_to_date=true" >> $GITHUB_ENV
             echo "${{ env.cache_up_to_date }}"
