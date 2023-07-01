@@ -5,6 +5,9 @@ import tech.jhipster.lite.generator.client.react.core.domain.ReactCoreModulesFac
 import tech.jhipster.lite.module.domain.JHipsterModule;
 import tech.jhipster.lite.module.domain.properties.JHipsterModuleProperties;
 
+/**
+  * this is a comment.
+  */
 @Service
 public class ReactCoreApplicationService {
 
