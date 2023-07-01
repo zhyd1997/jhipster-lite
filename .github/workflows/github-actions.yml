@@ -182,7 +182,7 @@ jobs:
           MD5SUM_POM_XML=$(md5sum /tmp/jhlite/${{ matrix.app }}/pom.xml | cut -d ' ' -f 1)
           echo $MD5SUM_POM_XML
           cd /tmp/jhlite/
-          tar -cvf archive.tar ${{ matrix.app }}
+          tar -cvf archive.tar --exclude="node_modules" ${{ matrix.app }}
           MD5SUM_${{ matrix.app }}=$(md5sum archive.tar | cut -d ' ' -f 1)
           echo ${MD5SUM_${{ matrix.app }}
       - name: 'Init: cache local Maven repository'
