@@ -187,8 +187,8 @@ jobs:
           echo ">>>"
           echo $MD5SUM_${{ matrix.app }}
           echo "${{ env['md5sum_${{ matrix.app }}'] }}"
-          localMd5Sum = $MD5SUM_${{ matrix.app }}
-          envMd5Sum = ${{ env['md5sum_${{ matrix.app }}'] }}
+          localMd5Sum = "$MD5SUM_${{ matrix.app }}"
+          envMd5Sum = "${{ env['md5sum_${{ matrix.app }}'] }}"
           echo "<<<"
           echo ">>>"
           echo $localMd5Sum
