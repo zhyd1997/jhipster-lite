@@ -207,8 +207,33 @@ jobs:
           ls -al /tmp/jhlite/${{ matrix.app }}
           MD5SUM_POM_XML=$(md5sum /tmp/jhlite/${{ matrix.app }}/pom.xml | cut -d ' ' -f 1)
           echo $MD5SUM_POM_XML
+          cd /tmp/jhlite/
+          tar -cvf ${{ matrix.app }}_archive.tar --exclude="node_modules" --exclude=".gitattributes" --exclude=".git" ${{ matrix.app }}
+          MD5SUM_${{ matrix.app }}=$(md5sum ${{ matrix.app }}_archive.tar | cut -d ' ' -f 1)
+          echo ">>>"
+          echo $MD5SUM_${{ matrix.app }}
+          echo "${{ env['md5sum_${{ matrix.app }}'] }}"
+          localMd5Sum = "$MD5SUM_${{ matrix.app }}"
+          envMd5Sum = "${{ env['md5sum_${{ matrix.app }}'] }}"
+          echo "<<<"
+          echo ">>>"
+          echo $localMd5Sum
+          echo $envMd5Sum
+          echo "<<<"
+          if [ "${{ envMd5Sum }}" == "${{ localMd5Sum }}" ]; then
+            echo "Cache is up to date. Stopping workflow..."
+            echo "cache_up_to_date=true" >> $GITHUB_OUTPUT
+            echo "${{ env.cache_up_to_date }}"
+            rm -f ${{ matrix.app }}_archive.tar
+            exit 0
+          fi
+          echo "Cache needs to be updated."
+          echo "cache_up_to_date=false" >> $GITHUB_OUTPUT
           echo "md5sum_pom_xml=${MD5SUM_POM_XML}" >> $GITHUB_OUTPUT
+          echo "md5sum_${{ matrix.app }}=${MD5SUM_${{ matrix.app }}}}" >> $GITHUB_OUTPUT
+          rm -rf ${{ matrix.app }}_archive.tar
       - name: 'Init: cache local Maven repository'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         uses: actions/cache@v3
         with:
           path: ~/.m2/repository
@@ -216,14 +241,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: 'Test: starting Sonar'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
+          echo ${{ steps.cache_md5sum.outputs.cache_up_to_date }}
           if [ -f 'src/main/docker/sonar.yml' ]; then
             docker-compose -f src/main/docker/sonar.yml up -d
             ${{ github.workspace }}/tests-ci/wait_sonar.sh
             docker ps -a
           fi
       - name: 'Test: verify ${{ matrix.app }}'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           if [ -f 'mvnw' ]; then
@@ -235,17 +263,21 @@ jobs:
             npm test
           fi
       - name: 'Test: check local Sonar Analysis'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         run: |
           if [ -f '/tmp/jhlite/${{ matrix.app }}/src/main/docker/sonar.yml' ]; then
             ./tests-ci/sonar.sh ${{ matrix.app }}
           fi
       - name: 'Test: copy shell scripts'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         run: cp ./tests-ci/start.sh /tmp/jhlite/${{ matrix.app }}/
       - name: 'Test: start docker compose services'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: ./tests-ci/
         run: |
           ./start_docker_compose.sh /tmp/jhlite/${{ matrix.app }}/
       - name: 'Test: start the application'
+        if: ${{ steps.cache_md5sum.outputs.cache_up_to_date == 'false' }}
         working-directory: /tmp/jhlite/${{ matrix.app }}/
         run: |
           # TODO: add also 'gradlew' once gradle support is more advanced
